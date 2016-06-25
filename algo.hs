@@ -1,5 +1,6 @@
 import Data.List
 import Data.Hex
+import System.Environment(getArgs)
 --xor operation
 xor :: String->String->String
 xor str1 str2 = zipWith (\a b -> if (a == b) then '0' else '1') str1 str2
@@ -159,3 +160,14 @@ decrypt xs sx k 0 = xs++sx
 decrypt xs sx k n = let ls = (xor sx (function xs k n)) in decrypt ls xs k (n-1)
 --end
 
+main :: IO ()
+main = let
+    (x:y:_) <- getArgs
+    handle <- openFile y ReadMode
+    contents <- hGetContents handle 
+    let some = des (hex contents) x
+    hanle <- openFile "cipher.txt" WriteMode  
+    hPutStr some
+    hClose handle
+    hClose handle
+    putStrLn "checkCipher.txt"
