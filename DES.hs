@@ -28,26 +28,14 @@ converthexa8 a
  -- hexa finished
  -- final encrypted text
 divide1 :: String->String->String
-divide1 abce k3 = binarytohexa8 (subkeyfinal b1)
- where b1 =  reverse (take 32 (reverse abcd)) ++ x2  (take 32 abcd) (function (reverse (take 32 (reverse abcd))) (key k4 1)) 
-       b2 = reverse (take 32 (reverse b1)) ++ x2 (take 32 b1) (function  (reverse (take 32 (reverse b1)))  (key k4 2))
-       b3 = reverse (take 32 (reverse b2)) ++ x2 (take 32 b2) (function ( reverse (take 32 (reverse b2))) (key k4 3))
-       b4 = reverse (take 32 (reverse b3)) ++ x2 (take 32 b3) (function (reverse (take 32 (reverse b3))) (key k4 4))
-       b5 =  reverse (take 32 (reverse b4)) ++ x2 (take 32 b4) (function (reverse (take 32 (reverse b4))) (key k4 5))
-       b6 = reverse (take 32 (reverse b5)) ++ x2 (take 32 b5) (function (reverse (take 32 (reverse b5))) (key k4 6))
-       b7 = reverse (take 32 (reverse b6)) ++ x2 (take 32 b6) (function (reverse (take 32 (reverse b6))) (key k4 7))
-       b8 = reverse (take 32 (reverse b7)) ++ x2 (take 32 b7) (function (reverse (take 32 (reverse b7))) (key k4 8))
-       b9 = reverse (take 32 (reverse b8)) ++ x2 (take 32 b8) (function (reverse (take 32 (reverse b8))) (key k4 9))
-       b10 = reverse (take 32 (reverse b9)) ++ x2 (take 32 b9) (function ( reverse (take 32 (reverse b9))) (key k4 10))
-       b11 = reverse (take 32 (reverse b10)) ++ x2 (take 32 b10) (function (reverse (take 32 (reverse b10))) (key k4 11))
-       b12 = reverse (take 32 (reverse b11)) ++ x2 (take 32 b11) (function (reverse (take 32 (reverse b11))) (key k4 12))
-       b13 = reverse (take 32 (reverse b12)) ++ x2 (take 32 b12) (function (reverse (take 32 (reverse b12))) (key k4 13))
-       b14 = reverse (take 32 (reverse b13)) ++ x2 (take 32 b13) (function (reverse (take 32 (reverse b13))) (key k4 14))
-       b15 = reverse (take 32 (reverse b14)) ++ x2 (take 32 b14) (function (reverse (take 32 (reverse b14))) (key k4 15))
-       b16 = reverse (take 32 (reverse b15)) ++ x2 (take 32 b15) (function (reverse (take 32 (reverse b15))) (key k4 16))
-       abcd = subkey5 (binarystring abce)
+divide1 abce k3 = (encrypt xs sx k4 1)
+ where 
+       xs = take 32 $ subkey5 (binarystring abce)
+       sx = drop 32 $ subkey5 (binarystring abce)
        k4 = binarystring k3
-
+encrypt :: String->String->String->Int->String
+encrypt xs sx k4 0 = sx ++ xs
+encrypt xs sx k4 n = encrypt sx (function sx (key k4 1)) k4 (n-1)
 --final permutation start
 ge :: String->Int->Char
 ge abs l = abs !! (j-1)
@@ -262,11 +250,8 @@ final_sbox ab = subkey7 (divide ab)
 
 function :: String->String->String
 function r k = final_sbox s 
- where s = (get_xor (bit1 r) k)
+ where s = (x2 (enot r 8) k)
       
-get_xor :: String->String->String
-get_xor str1 str2 = [xor (str1 !! 0) (str2 !! 0)] ++ [xor (str2 !! 1) (str1 !! 1)]++[xor (str1 !! 2) (str2 !! 2)]++ [xor (str1!!3) (str2 !! 3)] ++ [xor (str2 !! 4) (str1 !! 4)]++[xor (str1 !! 5) (str2 !! 5)]++ [xor (str1!! 6) (str2 !! 6)] ++ [xor (str2 !! 7) (str1 !! 7)]++[xor (str1 !! 8) (str2 !! 8)]++ [xor (str1!!9) (str2 !! 9)] ++ [xor (str2 !! 10) (str1 !! 10)]++[ xor (str1 !! 11) (str2 !! 11)]++ [xor (str1 !! 12) (str2 !! 12)]++ [xor (str1!!13) (str2 !! 13)] ++[xor (str1 !! 14) (str2 !! 14)]++ [xor (str1!!15) (str2 !! 15)] ++[xor (str2 !! 16) (str1 !! 16)]++[xor (str1 !! 17) (str2 !! 17)]++ [xor (str1!!18) (str2 !! 18)] ++ [xor (str2 !! 19) (str1 !! 19)]++[xor (str1 !! 20) (str2 !! 20)]++ [xor (str1!!21) (str2 !! 21)] ++ [xor (str2 !! 22) (str1 !! 22)]++[xor (str1 !! 23) (str2 !! 23)]++ [xor (str1 !! 24) (str2 !! 24)]++[xor (str2 !! 25) (str1 !! 25 )]++[xor (str1!!26) (str2 !! 26)] ++ [xor (str2 !! 27) (str1 !! 27)]++[xor (str1 !! 28) (str2 !! 28)]++ [xor (str1!!29) (str2 !! 29)] ++ [xor (str2 !! 30) (str1 !! 30)]++[xor (str2 !! 31) (str1 !! 31)]++[xor (str1!!32) (str2 !! 32)]++[xor (str1!!33) (str2 !! 33)] ++[xor (str2 !! 34) (str1 !! 34)]++[xor (str1 !! 35) (str2 !! 35)]++[xor (str2 !! 36) (str1 !! 36)]++[xor (str1 !! 37) (str2 !! 37)]++[xor (str2 !! 38) (str1 !! 38)]++[xor (str1 !! 39) (str2 !! 39)]++[xor (str2 !! 40) (str1 !! 40)]++[xor (str1 !! 41) (str2 !! 41)]++[xor (str2 !! 42) (str1 !! 42)]++[xor (str1 !! 43) (str2 !! 43)]++[xor (str2 !! 44) (str1 !! 44)]++[xor (str1 !! 45) (str2 !! 45)]++[xor (str2 !! 46) (str1 !! 46)]++[xor (str1 !! 47) (str2 !! 47)]
-            
 xor :: Char->Char->Char
 xor a b
  | a==b && a=='0' = '0'
@@ -281,7 +266,16 @@ get_index1 i = [32,1,2,3,4,5,4,5,6,7,8,9,8,9,10,11,12,13,12,13,14,15,16,17,16,17
 bit1 :: String->String
 bit1 key = [etchar key 1] ++ [etchar key 2] ++ [etchar key 3] ++ [etchar key 4]++[etchar key 5] ++ [etchar key 6] ++ [etchar key 7] ++ [etchar key 8]++[etchar key 9] ++ [etchar key 10] ++ [etchar key 11] ++ [etchar key 12]++[etchar key 13] ++ [etchar key 14] ++ [etchar key 15] ++ [etchar key 16] ++ [etchar key 17] ++ [etchar key 18] ++ [etchar key 19]++[etchar key 20] ++ [etchar key 21] ++ [etchar key 22] ++ [etchar key 23]++[etchar key 24] ++ [etchar key 25] ++ [etchar key 26] ++ [etchar key 27]++[etchar key 28] ++ [etchar key 29] ++ [etchar key 30] ++[etchar key 31]++[etchar key 32]++[etchar key 33]++[etchar key 34] ++ [etchar key 35] ++ [etchar key 36] ++ [etchar key 37]++[etchar key 38] ++ [etchar key 39] ++ [etchar key 40] ++ [etchar key 41] ++ [etchar key 42] ++ [etchar key 43] ++ [etchar key 44]++[etchar key 45] ++[etchar key 46] ++ [etchar key 47] ++ [etchar key 48]
 -- this is to take input in hexa form
+split :: String->Int->[String]
+split _ 0 = []
+split (a:b:c:d:xs) n = (a:b:c:d:[]):split xs (n-1)
 
+process :: [Char] -> [Char]
+process (x:xs) = let some = if (x == '1') then '0' else '1' in ([some] ++ [x] ++ xs ++ [some])
+
+enot :: String -> Int -> [Char]
+enot list n = ls>>= process
+ where ls = split list n 
 
 
 
